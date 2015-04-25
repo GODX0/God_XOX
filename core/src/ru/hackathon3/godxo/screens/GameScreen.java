@@ -3,7 +3,6 @@ package ru.hackathon3.godxo.screens;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -18,7 +17,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import ru.hackathon3.godxo.MyGame;
-import ru.hackathon3.godxo.screens.SplashScreen;
 
 public class GameScreen implements Screen,InputProcessor {
     MyGame game;
