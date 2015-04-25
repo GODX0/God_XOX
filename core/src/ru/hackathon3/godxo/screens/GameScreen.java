@@ -135,6 +135,7 @@ public class GameScreen implements Screen,InputProcessor {
     }
 
     public void clearBoard(){
+        animx=0;animy=0;
         symbol=1;
         for (int i = 0; i < pole_size; i++) {
             for (int j = 0; j < pole_size; j++) {
@@ -194,8 +195,8 @@ public class GameScreen implements Screen,InputProcessor {
         spriteBatch.begin();
             spriteBatch.draw(textures.get("back"), 0,0);
             Font1.draw(spriteBatch,"Player: "+symbol+"",10,CAMERA_HEIGHT-50);
-            if (symbolAnim==1) spriteBatch.draw(currentFrame,cell_width*animx+cell_width/2 , cell_width*animy+cell_width/2+offset,cell_width,cell_width);
-            if (symbolAnim==2) spriteBatch.draw(currentFrame,cell_width*animx+cell_width/2 , cell_width*animy+cell_width/2+offset,cell_width,cell_width);
+            if ((symbolAnim==1)&((animx!=0)|(animy!=0))) spriteBatch.draw(currentFrame,cell_width*animx+cell_width/2 , cell_width*animy+cell_width/2+offset,cell_width,cell_width);
+            if ((symbolAnim==2)&((animx!=0)|(animy!=0))) spriteBatch.draw(currentFrame,cell_width*animx+cell_width/2 , cell_width*animy+cell_width/2+offset,cell_width,cell_width);
         showBoard();
         spriteBatch.end();
     }
