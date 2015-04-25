@@ -7,8 +7,10 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -20,6 +22,7 @@ public class GameScreen implements Screen,InputProcessor {
     private SpriteBatch spriteBatch;
     public  Map<String, Texture> textures;
     float w,h,ppux,ppuy;
+    private BitmapFont Font1;
 
     public OrthographicCamera cam;
     float CAMERA_WIDTH = 480F;
@@ -27,6 +30,8 @@ public class GameScreen implements Screen,InputProcessor {
 
     int pole_size=7;
     float offset;
+    boolean b;
+    int symbol=1;
     float cell_width;
     int [][] vert =
             {
@@ -75,6 +80,9 @@ public class GameScreen implements Screen,InputProcessor {
         ppux = ((float)Gdx.graphics.getWidth())/480;
         ppuy = ((float)Gdx.graphics.getHeight())/800;
 
+        Font1 = new BitmapFont();
+        Font1.setColor(Color.RED);
+
         textures.put("logo", new Texture(Gdx.files.internal("badlogic.jpg")));
         textures.put("gray", new Texture(Gdx.files.internal("gray.png")));
         textures.put("blue", new Texture(Gdx.files.internal("blue.png")));
@@ -114,6 +122,10 @@ public class GameScreen implements Screen,InputProcessor {
         this.cam.update();
     }
 
+    public void setSymbol(int xx, int yy)
+    {
+        pole[xx][yy]=symbol;
+    }
     @Override
     public void render(float delta) {
         SetCamera(CAMERA_WIDTH/2, CAMERA_HEIGHT / 2f);
@@ -123,8 +135,9 @@ public class GameScreen implements Screen,InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         spriteBatch.begin();
-        spriteBatch.draw(textures.get("back"), 0,0);
-        showBoard();
+            spriteBatch.draw(textures.get("back"), 0,0);
+            Font1.draw(spriteBatch,"Player: "+symbol+"",10,CAMERA_HEIGHT-50);
+            showBoard();
         spriteBatch.end();
     }
 
@@ -141,8 +154,11 @@ public class GameScreen implements Screen,InputProcessor {
                     if ((h-y>(j*cell_width+cell_width/4)*ppuy+cell_width+offset*ppuy)&(h-y<(j*cell_width+cell_width-cell_width/4)*ppuy+cell_width+offset*ppuy))
                         if(vert[j][i]==0) {
                             vert[j][i]=1;//[y][x]
-                            if ( (vert[j][i-1]==1)&(hor[j][i-1]==1)&(hor[j+1][i-1]==1) ) pole[j][i-1]=1;
-                            if ( (vert[j][i+1]==1)&(hor[j][i]==1)  &(hor[j+1][i]==1)   ) pole[j][i]=1;
+                            b=false;
+                            if ( (vert[j][i-1]==1)&(hor[j][i-1]==1)&(hor[j+1][i-1]==1) ) {setSymbol(j,i-1);b=true;}
+                            if ( (vert[j][i+1]==1)&(hor[j][i]==1)  &(hor[j+1][i]==1)   ) {setSymbol(j,i);b=true;}
+                            if (!b) symbol+=1;
+                            if (symbol>2) symbol=1;
                         }
                 }
         }
@@ -152,8 +168,11 @@ public class GameScreen implements Screen,InputProcessor {
                     if ((x>(j*cell_width+cell_width/4)*ppux+cell_width)&(x<(j*cell_width+cell_width-cell_width/4)*ppux+cell_width))
                         if(hor[i][j]==0) {
                             hor[i][j]=1;  //[y][x]
-                            if ( (hor[i-1][j]==1)&(vert[i-1][j]==1)&(vert[i-1][j+1]==1) ) pole[i-1][j]=2;
-                            if ( (hor[i+1][j]==1)&(vert[i][j]==1)  &(vert[i][j+1]==1)   ) pole[i][j]=2;
+                            b=false;
+                            if ( (hor[i-1][j]==1)&(vert[i-1][j]==1)&(vert[i-1][j+1]==1) ){setSymbol(i-1,j);b=true;}
+                            if ( (hor[i+1][j]==1)&(vert[i][j]==1)  &(vert[i][j+1]==1)   ) {setSymbol(i,j);b=true;}
+                            if (!b) symbol+=1;
+                            if (symbol>2) symbol=1;
                         }
                 }
         }
