@@ -22,7 +22,8 @@ public class GameScreen implements Screen {
     float CAMERA_HEIGHT = 800F;
 
     int pole_size=7;
-    int cell_width = (480/(pole_size+1));
+    float offset;
+    float cell_width;
     int [][] vert =
             {
                     {-1,-1,-1,1,1,-1,-1,-1},
@@ -63,8 +64,10 @@ public class GameScreen implements Screen {
         this.cam = new OrthographicCamera(CAMERA_WIDTH, CAMERA_HEIGHT);
         w = (float)Gdx.graphics.getWidth();
         h = (float)Gdx.graphics.getHeight();
-        ppux = ((float)Gdx.graphics.getWidth())/600;
-        ppuy = ((float)Gdx.graphics.getHeight())/1024;
+        cell_width= (CAMERA_WIDTH/(pole_size+1));
+        offset=(CAMERA_HEIGHT/2-(cell_width*(pole_size+1))/2)-13;
+        ppux = ((float)Gdx.graphics.getWidth())/480;
+        ppuy = ((float)Gdx.graphics.getHeight())/800;
 
         textures.put("logo", new Texture(Gdx.files.internal("badlogic.jpg")));
         textures.put("gray", new Texture(Gdx.files.internal("gray.png")));
@@ -73,6 +76,7 @@ public class GameScreen implements Screen {
         textures.put("gray1", new Texture(Gdx.files.internal("gray1.png")));
         textures.put("X", new Texture(Gdx.files.internal("X.png")));
         textures.put("O", new Texture(Gdx.files.internal("O.png")));
+        textures.put("back", new Texture(Gdx.files.internal("back.png")));
     }
     public GameScreen(MyGame game){
         this.game = game;
@@ -81,20 +85,20 @@ public class GameScreen implements Screen {
     public void showBoard(){
         for (int i = 0; i < pole_size; i++) {
             for (int j = 0; j < pole_size+1; j++) {
-                if (vert[i][j]==1 ) spriteBatch.draw(textures.get("blue"), cell_width*j, cell_width*i+cell_width/2, cell_width, cell_width);
-                if (vert[i][j]==0 ) spriteBatch.draw(textures.get("gray"), cell_width*j, cell_width*i+cell_width/2, cell_width, cell_width);
+                if (vert[i][j]==1 ) spriteBatch.draw(textures.get("blue"), cell_width*j, cell_width*i+cell_width/2+offset, cell_width, cell_width);
+                if (vert[i][j]==0 ) spriteBatch.draw(textures.get("gray"), cell_width*j, cell_width*i+cell_width/2+offset, cell_width, cell_width);
             }
         }
         for (int i = 0; i < pole_size+1; i++) {
             for (int j = 0; j < pole_size; j++) {
-                if (hor[i][j]==1 ) spriteBatch.draw(textures.get("blue1"), cell_width*j+cell_width/2, cell_width*i, cell_width, cell_width);
-                if (hor[i][j]==0 ) spriteBatch.draw(textures.get("gray1"), cell_width*j+cell_width/2, cell_width*i, cell_width, cell_width);
+                if (hor[i][j]==1 ) spriteBatch.draw(textures.get("blue1"), cell_width*j+cell_width/2, cell_width*i+offset, cell_width, cell_width);
+                if (hor[i][j]==0 ) spriteBatch.draw(textures.get("gray1"), cell_width*j+cell_width/2, cell_width*i+offset, cell_width, cell_width);
             }
         }
         for (int i = 0; i < pole_size; i++) {
             for (int j = 0; j < pole_size; j++) {
-                if (pole[i][j]==2  ) spriteBatch.draw(textures.get("X"), cell_width*j+cell_width/2, cell_width*i+cell_width/2, cell_width, cell_width);
-                if (pole[i][j]==1 ) spriteBatch.draw(textures.get("O"), cell_width*j+cell_width/2, cell_width*i+cell_width/2, cell_width, cell_width);
+                if (pole[i][j]==2  ) spriteBatch.draw(textures.get("X"), cell_width*j+cell_width/2, cell_width*i+cell_width/2+offset, cell_width, cell_width);
+                if (pole[i][j]==1 ) spriteBatch.draw(textures.get("O"), cell_width*j+cell_width/2, cell_width*i+cell_width/2+offset, cell_width, cell_width);
             }
         }
     }
@@ -113,6 +117,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         spriteBatch.begin();
+        spriteBatch.draw(textures.get("back"), 0,0);
         showBoard();
         spriteBatch.end();
     }
@@ -129,7 +134,6 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
     }
-
     @Override
     public void dispose() {
     }

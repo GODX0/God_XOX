@@ -5,11 +5,13 @@ import com.badlogic.gdx.Game;
 
 public class MyGame extends Game {
     public GameScreen game;
+    public SplashScreen splash;
 
 	@Override
 	public void create () {
         game = new GameScreen(this);
-        setScreen(game);
+        splash = new SplashScreen(this);
+        setScreen(splash);
 	}
 
     @Override
