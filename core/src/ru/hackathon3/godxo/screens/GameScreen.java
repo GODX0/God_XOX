@@ -2,7 +2,10 @@ package ru.hackathon3.godxo.screens;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,8 +13,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 
 import ru.hackathon3.godxo.MyGame;
+import ru.hackathon3.godxo.screens.SplashScreen;
 
-public class GameScreen implements Screen {
+public class GameScreen implements Screen,InputProcessor {
     MyGame game;
     private SpriteBatch spriteBatch;
     public  Map<String, Texture> textures;
@@ -61,6 +65,8 @@ public class GameScreen implements Screen {
         spriteBatch = new SpriteBatch();
         textures = new HashMap<String, Texture>();
 
+        Gdx.input.setInputProcessor(this);
+        Gdx.input.setCatchBackKey(true);
         this.cam = new OrthographicCamera(CAMERA_WIDTH, CAMERA_HEIGHT);
         w = (float)Gdx.graphics.getWidth();
         h = (float)Gdx.graphics.getHeight();
@@ -123,6 +129,38 @@ public class GameScreen implements Screen {
     }
 
     @Override
+    public boolean touchDown(int x, int y, int pointer, int button) {
+
+        return true;
+    }
+    @Override
+    public boolean touchUp(int x, int y, int pointer, int button) {
+        for (int i = 0; i < pole_size+1; i++) {
+            if ((x>(i*cell_width+cell_width/4)*ppux)&(x<(i*cell_width+cell_width-cell_width/4)*ppux))
+                for (int j = 0; j <pole_size; j++) {
+                    if ((h-y>(j*cell_width+cell_width/4)*ppuy+cell_width+offset*ppuy)&(h-y<(j*cell_width+cell_width-cell_width/4)*ppuy+cell_width+offset*ppuy))
+                        if(vert[j][i]==0) {
+                            vert[j][i]=1;//[y][x]
+                            if ( (vert[j][i-1]==1)&(hor[j][i-1]==1)&(hor[j+1][i-1]==1) ) pole[j][i-1]=1;
+                            if ( (vert[j][i+1]==1)&(hor[j][i]==1)  &(hor[j+1][i]==1)   ) pole[j][i]=1;
+                        }
+                }
+        }
+        for (int i = 0; i < pole_size+1; i++) {
+            if ((h-y>(i*cell_width+cell_width/4)*ppuy+offset*ppuy)&(h-y<(i*cell_width+cell_width-cell_width/4)*ppuy+offset*ppuy))
+                for (int j = 0; j <pole_size; j++) {
+                    if ((x>(j*cell_width+cell_width/4)*ppux+cell_width)&(x<(j*cell_width+cell_width-cell_width/4)*ppux+cell_width))
+                        if(hor[i][j]==0) {
+                            hor[i][j]=1;  //[y][x]
+                            if ( (hor[i-1][j]==1)&(vert[i-1][j]==1)&(vert[i-1][j+1]==1) ) pole[i-1][j]=2;
+                            if ( (hor[i+1][j]==1)&(vert[i][j]==1)  &(vert[i][j+1]==1)   ) pole[i][j]=2;
+                        }
+                }
+        }
+        return true;
+    }
+
+    @Override
     public void hide() {
     }
     @Override
@@ -136,5 +174,32 @@ public class GameScreen implements Screen {
     }
     @Override
     public void dispose() {
+        Gdx.input.setInputProcessor(null);
+        Gdx.input.setCatchBackKey(false);
+    }
+
+    @Override
+    public boolean mouseMoved(int x, int y) {
+        return false;
+    }
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
+    @Override
+    public boolean touchDragged(int x, int y, int pointer) {
+        return false;
+    }
+    @Override
+    public boolean keyDown(int keycode) {
+        return true;
+    }
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+    @Override
+    public boolean keyUp(int keycode) {
+        return true;
     }
 }

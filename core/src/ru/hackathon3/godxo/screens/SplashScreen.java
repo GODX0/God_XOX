@@ -13,13 +13,15 @@ import ru.hackathon3.godxo.MyGame;
 public class SplashScreen implements Screen,InputProcessor {
     MyGame game;
     private SpriteBatch spriteBatch;
-    Texture backImage;
+    Texture pushImage,backImage;
     float ppux,ppuy;
+    int z;
 
     @Override
     public void show() {
         spriteBatch = new SpriteBatch();
         backImage = new Texture(Gdx.files.internal("splash.png"));
+        pushImage = new Texture(Gdx.files.internal("push.png"));
         ppux = ((float)Gdx.graphics.getWidth())/480;
         ppuy = ((float)Gdx.graphics.getHeight())/800;
         Gdx.input.setInputProcessor(this);
@@ -27,11 +29,14 @@ public class SplashScreen implements Screen,InputProcessor {
 
     @Override
     public void render(float delta) {
+        z++;
+        if (z>100) z=0;
         Gdx.gl.glClearColor(1,1,1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         spriteBatch.begin();
         spriteBatch.draw(backImage, 0,0,480*ppux,800*ppuy);
+        if (z>50)spriteBatch.draw(pushImage, 0,80,480*ppux,53*ppuy);
         spriteBatch.end();
     }
     @Override
