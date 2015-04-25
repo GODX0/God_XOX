@@ -19,7 +19,7 @@ public class SplashScreen implements Screen,InputProcessor {
     public Map<String, Texture> textures;
     Texture pushImage,backImage;
     float ppux,ppuy;
-    int z;
+    int z,y,x;
 
     @Override
     public void show() {
@@ -29,6 +29,9 @@ public class SplashScreen implements Screen,InputProcessor {
         textures.put("lighting1", new Texture(Gdx.files.internal("splash/lightingScene1.png")));
         textures.put("lighting2", new Texture(Gdx.files.internal("splash/lightingScene2.png")));
         textures.put("lighting3", new Texture(Gdx.files.internal("splash/lightingScene3.png")));
+        textures.put("clouds1", new Texture(Gdx.files.internal("splash/cloadSliding1LeftToRight.png")));
+        textures.put("clouds2", new Texture(Gdx.files.internal("splash/cloadSliding2RightToLeft.png")));
+        textures.put("clouds3", new Texture(Gdx.files.internal("splash/cloadSliding3LeftToRight.png")));
         textures.put("touch", new Texture(Gdx.files.internal("splash/touch.png")));
 
         ppux = ((float)Gdx.graphics.getWidth())/480;
@@ -38,19 +41,23 @@ public class SplashScreen implements Screen,InputProcessor {
 
     @Override
     public void render(float delta) {
-        z++;
-        if (z>400) z=0;
+        z++;y++;
+        if (x<410) x++;
+        if (z>300) z=0;
+        if (y>100) y=0;
         Gdx.gl.glClearColor(1,1,1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         spriteBatch.begin();
 
-        if (z>395){spriteBatch.draw(textures.get("lighting3"), 0,0,480*ppux,800*ppuy);}
-        else if (z>390){spriteBatch.draw(textures.get("lighting2"), 0,0,480*ppux,800*ppuy);}
-        else if (z>385){spriteBatch.draw(textures.get("lighting1"), 0,0,480*ppux,800*ppuy);}
+        if (z>290){spriteBatch.draw(textures.get("lighting3"), 0,0,480*ppux,800*ppuy);}
+        else if (z>285){spriteBatch.draw(textures.get("lighting2"), 0,0,480*ppux,800*ppuy);}
+        else if (z>275) spriteBatch.draw(textures.get("splashStatic"), 0,0,480*ppux,800*ppuy);
+        else if (z>270){spriteBatch.draw(textures.get("lighting2"), 0,0,480*ppux,800*ppuy);}
+        else if (z>265){spriteBatch.draw(textures.get("lighting1"), 0,0,480*ppux,800*ppuy);}
         else spriteBatch.draw(textures.get("splashStatic"), 0,0,480*ppux,800*ppuy);
 
-        if (z%50==0)spriteBatch.draw(textures.get("touch"), 0,0,480*ppux,800*ppuy);
+        if (y>50)spriteBatch.draw(textures.get("touch"), 0,0,480*ppux,800*ppuy);
         spriteBatch.end();
     }
     @Override
