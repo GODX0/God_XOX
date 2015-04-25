@@ -30,9 +30,9 @@ public class GameScreen implements Screen,InputProcessor {
     //анимация
     private static final int FRAME_COLS = 3; // #1
     private static final int FRAME_ROWS = 2; // #2
-    Animation krestAnimation; // #3
-    Texture krestSheet; // #4
-    TextureRegion[] krestFrames;
+    Animation krestAnimation,krugAnimation; // #3
+    Texture krestSheet,krugSheet; // #4
+    TextureRegion[] krestFrames,krugFrames;
     TextureRegion currentFrame; // #7
     float animx,animy;
     float stateTime; // #8
@@ -104,26 +104,28 @@ public class GameScreen implements Screen,InputProcessor {
         Font1.setColor(Color.RED);
         clearBoard();
 
-        textures.put("logo", new Texture(Gdx.files.internal("badlogic.jpg")));
         textures.put("gray", new Texture(Gdx.files.internal("gray.png")));
         textures.put("stickGor", new Texture(Gdx.files.internal("stickGor.png")));
         textures.put("stickVert", new Texture(Gdx.files.internal("stickVert.png")));
         textures.put("gray1", new Texture(Gdx.files.internal("gray1.png")));
-        textures.put("O", new Texture(Gdx.files.internal("O.png")));
         textures.put("back", new Texture(Gdx.files.internal("back.png")));
 
         //Анимация
         krestSheet = new Texture(Gdx.files.internal("krestAnim.png")); // #9
+        krugSheet = new Texture(Gdx.files.internal("krugAnim.png")); // #9
         TextureRegion[][] tmp = TextureRegion.split(krestSheet, krestSheet.getWidth()/FRAME_COLS, krestSheet.getHeight()/FRAME_ROWS); // #10
+        TextureRegion[][] tmp2 = TextureRegion.split(krugSheet, krugSheet.getWidth()/FRAME_COLS, krugSheet.getHeight()/FRAME_ROWS); // #10
         krestFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+        krugFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
         int index = 0;
         for (int i = 0; i < FRAME_ROWS; i++) {
             for (int j = 0; j < FRAME_COLS; j++) {
-                krestFrames[index++] = tmp[i][j];
+                krestFrames[index] = tmp[i][j];
+                krugFrames[index++] = tmp2[i][j];
             }
         }
         krestAnimation = new Animation(0.083f, krestFrames); // #11
-        spriteBatch = new SpriteBatch(); // #12
+        krugAnimation = new Animation(0.083f, krugFrames); // #11
         stateTime = 0f; // #13
         anim=false;
 
@@ -158,7 +160,7 @@ public class GameScreen implements Screen,InputProcessor {
         for (int i = 0; i < pole_size; i++) {
             for (int j = 0; j < pole_size; j++) {
                 if ((pole[i][j]==2 )&((i!=animy)|(j!=animx))) spriteBatch.draw(krestFrames[5], cell_width*j+cell_width/2, cell_width*i+cell_width/2+offset, cell_width, cell_width);
-                if (pole[i][j]==1 ) spriteBatch.draw(textures.get("O"), cell_width*j+cell_width/2, cell_width*i+cell_width/2+offset, cell_width, cell_width);
+                if ((pole[i][j]==1 )&((i!=animy)|(j!=animx))) spriteBatch.draw(krugFrames[5], cell_width*j+cell_width/2, cell_width*i+cell_width/2+offset, cell_width, cell_width);
             }
         }
     }
@@ -185,14 +187,16 @@ public class GameScreen implements Screen,InputProcessor {
         Gdx.gl.glClearColor(1,1,1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            stateTime += Gdx.graphics.getDeltaTime(); // #15
-            currentFrame = krestAnimation.getKeyFrame(stateTime, false);
+        stateTime += Gdx.graphics.getDeltaTime(); // #15
+        if (symbolAnim==1)  currentFrame = krestAnimation.getKeyFrame(stateTime, false);
+        if (symbolAnim==2)   currentFrame = krugAnimation.getKeyFrame(stateTime, false);
 
         spriteBatch.begin();
             spriteBatch.draw(textures.get("back"), 0,0);
             Font1.draw(spriteBatch,"Player: "+symbol+"",10,CAMERA_HEIGHT-50);
             if (symbolAnim==1) spriteBatch.draw(currentFrame,cell_width*animx+cell_width/2 , cell_width*animy+cell_width/2+offset,cell_width,cell_width);
-            showBoard();
+            if (symbolAnim==2) spriteBatch.draw(currentFrame,cell_width*animx+cell_width/2 , cell_width*animy+cell_width/2+offset,cell_width,cell_width);
+        showBoard();
         spriteBatch.end();
     }
 
