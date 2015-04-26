@@ -17,7 +17,6 @@ public class SplashScreen implements Screen,InputProcessor {
     MyGame game;
     private SpriteBatch spriteBatch;
     public Map<String, Texture> textures;
-    Texture pushImage,backImage;
     float ppux,ppuy;
     int z,y,x;
 
@@ -41,7 +40,7 @@ public class SplashScreen implements Screen,InputProcessor {
 
     @Override
     public void render(float delta) {
-        z++;y++;
+        z++;if (x>479)y++;
         if (x<480) x+=5;
         if (z>300) z=0;
         if (y>100) y=0;
@@ -76,7 +75,7 @@ public class SplashScreen implements Screen,InputProcessor {
         if (!Gdx.app.getType().equals(ApplicationType.Android))
             return false;
         dispose();
-        game.setScreen(game.game);
+        game.setScreen(game.menu);
         return true;
     }
     @Override

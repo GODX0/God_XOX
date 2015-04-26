@@ -280,7 +280,7 @@ public class GameScreen implements Screen,InputProcessor {
         if(keycode == Input.Keys.BACK ){
 
             this.dispose();
-            game.setScreen(game.splash);
+            game.setScreen(game.menu);
 
         }
         return true;

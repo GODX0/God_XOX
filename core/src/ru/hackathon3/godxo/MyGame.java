@@ -6,10 +6,12 @@ import com.badlogic.gdx.Game;
 public class MyGame extends Game {
     public GameScreen game;
     public SplashScreen splash;
+    public MenuScreen menu;
 
 	@Override
 	public void create () {
         game = new GameScreen(this);
+        menu = new MenuScreen(this);
         splash = new SplashScreen(this);
         setScreen(splash);
 	}
