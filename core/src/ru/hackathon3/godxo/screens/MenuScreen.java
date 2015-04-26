@@ -91,6 +91,11 @@ public class MenuScreen implements Screen,InputProcessor {
             game.setScreen(game.menu2);
 
         }
+        if((downGod)&(y>497*ppuy && y<647*ppuy && x>52*ppux && x<202*ppux)) {
+            dispose();
+            game.setScreen(game.menuGod);
+
+        }
         if((y>730*ppuy && y<790*ppuy && x>403*ppux && x<463*ppux)) {
             Gdx.app.exit();
             dispose();

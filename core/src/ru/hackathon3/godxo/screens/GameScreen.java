@@ -17,9 +17,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import ru.hackathon3.godxo.MyGame;
+import ru.hackathon3.godxo.Variables;
 
 public class GameScreen implements Screen,InputProcessor {
     MyGame game;
+    Variables varvar;
     private SpriteBatch spriteBatch;
     public  Map<String, Texture> textures;
     float w,h,ppux,ppuy;
@@ -45,7 +47,41 @@ public class GameScreen implements Screen,InputProcessor {
     int symbol=1;
     int symbolAnim;
     float cell_width;
-    int [][] vert =
+    int [][] vert;
+    int [][] hor;
+    int [][] pole;
+    int [][] vert7 =
+            {
+                    {-1,-1,-1,1,1,-1,-1,-1},
+                    {-1,-1, 1,0,0, 1,-1,-1},
+                    {-1, 1, 0,0,0, 0, 1,-1},
+                    { 1, 1, 0,0,0, 0, 1, 1},
+                    {-1, 1, 0,0,0, 0, 1,-1},
+                    {-1,-1, 1,0,0, 1,-1,-1},
+                    {-1,-1,-1,1,1,-1,-1,-1}
+            };
+    int [][] hor7 =
+            {
+                    {-1,-1,-1,1,-1,-1,-1},
+                    {-1,-1, 1,1, 1,-1,-1},
+                    {-1, 1, 0,0, 0, 1,-1},
+                    { 1, 0, 0,0, 0, 0, 1},
+                    { 1, 0, 0,0, 0, 0, 1},
+                    {-1, 1, 0,0, 0, 1,-1},
+                    {-1,-1, 1,1, 1,-1,-1},
+                    {-1,-1,-1,1,-1,-1,-1}
+            };
+    int [][] pole7 =
+            {
+                    {-1,-1,-1,1,-1,-1,-1},
+                    {-1,-1, 0,0, 0,-1,-1},
+                    {-1, 0, 0,0, 0, 0,-1},
+                    { 1, 0, 0,0, 0, 0, 2},
+                    {-1, 0, 0,0, 0, 0,-1},
+                    {-1,-1, 0,0, 0,-1,-1},
+                    {-1,-1,-1,2,-1,-1,-1}
+            };
+    final int [][] vert9 =
             {
                     {-1,-1,-1,-1,1,1,-1,-1,-1,-1},
                     {-1,-1,-1,1,0,0,1,-1,-1,-1},
@@ -57,7 +93,7 @@ public class GameScreen implements Screen,InputProcessor {
                     {-1,-1,-1,1,0,0,1,-1,-1,-1},
                     {-1,-1,-1,-1,1,1,-1,-1,-1,-1}
             };
-    int [][] hor =
+    final int [][] hor9 =
             {
                     {-1,-1,-1,-1,1,-1,-1,-1,-1},
                     {-1,-1,-1, 1,1, 1,-1,-1,-1},
@@ -70,7 +106,7 @@ public class GameScreen implements Screen,InputProcessor {
                     {-1,-1,-1, 1,1, 1,-1,-1,-1},
                     {-1,-1,-1,-1,1,-1,-1,-1,-1},
             };
-    int [][] pole =
+    final int [][] pole9 =
             {
                     {-1,-1,-1,-1,1,-1,-1,-1,-1},
                     {-1,-1,-1,0,0,0,-1,-1,-1},
@@ -82,12 +118,129 @@ public class GameScreen implements Screen,InputProcessor {
                     {-1,-1,-1,0,0,0,-1,-1,-1},
                     {-1,-1,-1,-1,1,-1,-1,-1,-1}
             };
+    final int [][] vert11 =
+            {
+                    {-1,-1,-1,-1,-1,1,1,-1,-1,-1,-1,-1},
+                    {-1,-1,-1,-1,1,0,0,1,-1,-1,-1,-1},
+                    {-1,-1,-1,1,0,0,0,0,1,-1,-1,-1},
+                    {-1,-1,1,0,0,0,0,0,0,1,-1,-1},
+                    {-1,1,0,0,0,0,0,0,0,0,1,-1},
+                    {1,1,0,0,0,0,0,0,0,0,1,1},
+                    {-1,1,0,0,0,0,0,0,0,0,1,-1},
+                    {-1,-1,1,0,0,0,0,0,0,1,-1,-1},
+                    {-1,-1,-1,1,0,0,0,0,1,-1,-1,-1},
+                    {-1,-1,-1,-1,1,0,0,1,-1,-1,-1,-1},
+                    {-1,-1,-1,-1,-1,1,1,-1,-1,-1,-1,-1}
+            };
 
+    final int [][] hor11 =
+            {
+                    {-1,-1,-1,-1,-1,1,-1,-1,-1,-1,-1},
+                    {-1,-1,-1,-1,1,1,1,-1,-1,-1,-1},
+                    {-1,-1,-1,1,0,0,0,1,-1,-1,-1},
+                    {-1,-1,1,0,0,0,0,0,1,-1,-1},
+                    {-1,1,0,0,0,0,0,0,0,1,-1},
+                    {1,0,0,0,0,0,0,0,0,0,1},
+                    {1,0,0,0,0,0,0,0,0,0,1},
+                    {-1,1,0,0,0,0,0,0,0,1,-1},
+                    {-1,-1,1,0,0,0,0,0,1,-1,-1},
+                    {-1,-1,-1,1,0,0,0,1,-1,-1,-1},
+                    {-1,-1,-1,-1,1,1,1,-1,-1,-1,-1},
+                    {-1,-1,-1,-1,-1,1,-1,-1,-1,-1,-1}
+            };
+    final int [][] pole11 =
+            {
+                    {-1, -1, -1, -1, -1, 2, -1, -1, -1, -1, -1},
+                    {-1, -1, -1, -1, 0, 0, 0, -1, -1, -1, -1},
+                    {-1, -1, -1, 0, 0, 0, 0, 0, -1, -1, -1},
+                    {-1, -1, 0, 0, 0, 0, 0, 0, 0, -1, -1},
+                    {-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+                    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                    {-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+                    {-1, -1, 0, 0, 0, 0, 0, 0, 0, -1, -1},
+                    {-1, -1, -1, 0, 0, 0, 0, 0, -1, -1, -1},
+                    {-1, -1, -1, -1, 0, 0, 0, -1, -1, -1, -1},
+                    {-1, -1, -1, -1, -1, 2, -1, -1, -1, -1, -1}
+            };
+    final int [][] vert13 =
+            {
+
+                    {-1, -1, -1, -1, -1, -1, 1, 1, -1, -1, -1, -1, -1, -1},
+                    {-1, -1, -1, -1, -1, 1, 0, 0, 1, -1, -1, -1, -1, -1},
+                    {-1, -1, -1, -1, 1, 0, 0, 0, 0, 1, -1, -1, -1, -1},
+                    {-1, -1, -1, 1, 0, 0, 0, 0, 0, 0, 1, -1, -1, -1},
+                    {-1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, -1},
+                    {-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1},
+                    {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1},
+                    {-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1},
+                    {-1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1, -1},
+                    {-1, -1, -1, 1, 0, 0, 0, 0, 0, 0, 1, -1, -1, -1},
+                    {-1, -1, -1, -1, 1, 0, 0, 0, 0, 1, -1, -1, -1, -1},
+                    {-1, -1, -1, -1, -1, 1, 0, 0, 1, -1, -1, -1, -1, -1},
+                    {-1, -1, -1, -1, -1, -1, 1, 1, -1, -1, -1, -1, -1, -1}
+            };
+
+    final int [][] hor13 =
+            {
+                    {-1, -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1},
+                    {-1, -1, -1, -1, -1, 1, 1, 1, -1, -1, -1, -1, -1},
+                    {-1, -1, -1, -1, 1, 0, 0, 0, 1, -1, -1, -1, -1},
+                    {-1, -1, -1, 1, 0, 0, 0, 0, 0, 1, -1, -1, -1},
+                    {-1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 1, -1, -1},
+                    {-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1},
+                    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                    {-1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1},
+                    {-1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 1, -1, -1},
+                    {-1, -1, -1, 1, 0, 0, 0, 0, 0, 1, -1, -1, -1},
+                    {-1, -1, -1, -1, 1, 0, 0, 0, 1, -1, -1, -1, -1},
+                    {-1, -1, -1, -1, -1, 1, 1, 1, -1, -1, -1, -1, -1},
+                    {-1, -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1}
+            };
+    final int [][] pole13 =
+            {
+                    {-1, -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1},
+                    {-1, -1, -1, -1, -1, 0, 0, 0, -1, -1, -1, -1, -1},
+                    {-1, -1, -1, -1, 0, 0, 0, 0, 0, -1, -1, -1, -1},
+                    {-1, -1, -1, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1},
+                    {-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1},
+                    {-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+                    {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+                    {-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1},
+                    {-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1},
+                    {-1, -1, -1, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1},
+                    {-1, -1, -1, -1, 0, 0, 0, 0, 0, -1, -1, -1, -1},
+                    {-1, -1, -1, -1, -1, 0, 0, 0, -1, -1, -1, -1, -1},
+                    {-1, -1, -1, -1, -1, -1, 1, -1, -1, -1, -1, -1, -1}
+            };
     @Override
     public void show() {
         spriteBatch = new SpriteBatch();
         textures = new HashMap<String, Texture>();
-
+        if (varvar.cell==3) {
+            pole_size=13;
+            pole=pole13;
+            vert=vert13;
+            hor=hor13;
+        }
+        else if (varvar.cell==2) {
+            pole_size=11;
+            pole=pole11;
+            vert=vert11;
+            hor=hor11;
+        }
+        else if (varvar.cell==1) {
+            pole_size=9;
+            pole=pole9;
+            vert=vert9;
+            hor=hor9;
+        }
+        else if (varvar.cell==0) {
+            pole_size=7;
+            pole=pole7;
+            vert=vert7;
+            hor=hor7;
+        }
         Gdx.input.setInputProcessor(this);
         Gdx.input.setCatchBackKey(true);
         this.cam = new OrthographicCamera(CAMERA_WIDTH, CAMERA_HEIGHT);
@@ -107,10 +260,11 @@ public class GameScreen implements Screen,InputProcessor {
         textures.put("stickVert", new Texture(Gdx.files.internal("stickVert.png")));
         textures.put("gray1", new Texture(Gdx.files.internal("gray1.png")));
         textures.put("back", new Texture(Gdx.files.internal("back.png")));
+        textures.put("panelHod", new Texture(Gdx.files.internal("panelHod.png")));
 
         //Анимация
-        krestSheet = new Texture(Gdx.files.internal("krestAnim.png")); // #9
-        krugSheet = new Texture(Gdx.files.internal("krugAnim.png")); // #9
+        krestSheet = new Texture(Gdx.files.internal("krugAnim.png")); // #9
+        krugSheet = new Texture(Gdx.files.internal("krestAnim.png")); // #9
         TextureRegion[][] tmp = TextureRegion.split(krestSheet, krestSheet.getWidth()/FRAME_COLS, krestSheet.getHeight()/FRAME_ROWS); // #10
         TextureRegion[][] tmp2 = TextureRegion.split(krugSheet, krugSheet.getWidth()/FRAME_COLS, krugSheet.getHeight()/FRAME_ROWS); // #10
         krestFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
@@ -135,6 +289,7 @@ public class GameScreen implements Screen,InputProcessor {
     public void clearBoard(){
         animx=0;animy=0;
         symbol=1;
+        symbolAnim=1;
         for (int i = 0; i < pole_size; i++) {
             for (int j = 0; j < pole_size; j++) {
                 if ((i>0)&(j>0)&(i<pole_size-1)&(j<pole_size-1)&(pole[i][j]>0)) pole[i][j]=0;
@@ -192,7 +347,8 @@ public class GameScreen implements Screen,InputProcessor {
 
         spriteBatch.begin();
             spriteBatch.draw(textures.get("back"), 0,0);
-            Font1.draw(spriteBatch,"Player: "+symbol+"",10,CAMERA_HEIGHT-50);
+            spriteBatch.draw(textures.get("panelHod"), 0,0);
+            Font1.draw(spriteBatch,"Player: "+symbol+"",230,CAMERA_HEIGHT-50);
             if ((symbolAnim==1)&((animx!=0)|(animy!=0))) spriteBatch.draw(currentFrame,cell_width*animx+cell_width/2 , cell_width*animy+cell_width/2+offset,cell_width,cell_width);
             if ((symbolAnim==2)&((animx!=0)|(animy!=0))) spriteBatch.draw(currentFrame,cell_width*animx+cell_width/2 , cell_width*animy+cell_width/2+offset,cell_width,cell_width);
         showBoard();

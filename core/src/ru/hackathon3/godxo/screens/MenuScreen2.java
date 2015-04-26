@@ -13,17 +13,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ru.hackathon3.godxo.MyGame;
+import ru.hackathon3.godxo.Variables;
 
 public class MenuScreen2 implements Screen,InputProcessor {
     MyGame game;
+    Variables varvar;
     private SpriteBatch spriteBatch;
     public Map<String, Texture> textures;
     float ppux,ppuy;
     boolean downBot,downFriends,downNetwork;
     int z;
-
     @Override
     public void show() {
+
         spriteBatch = new SpriteBatch();
         downBot=false;
         downFriends=false;
@@ -83,6 +85,16 @@ public class MenuScreen2 implements Screen,InputProcessor {
     public boolean touchUp(int x, int y, int pointer, int button) {
         //if (!Gdx.app.getType().equals(ApplicationType.Android))
         //    return false;
+        if(downFriends&(y>259*ppuy && y<334*ppuy && x>124*ppux && x<369*ppux)) {
+            varvar.cell=1;
+            dispose();
+            game.setScreen(game.game);
+        }
+        if(downBot&(y>162*ppuy && y<237*ppuy && x>124*ppux && x<369*ppux)) {
+            varvar.cell=0;
+            dispose();
+            game.setScreen(game.game);
+        }
         if((y>730*ppuy && y<790*ppuy && x>403*ppux && x<463*ppux)) {
             dispose();
             game.setScreen(game.menu);
