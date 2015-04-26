@@ -73,9 +73,10 @@ public class MenuScreen implements Screen,InputProcessor {
     }
     @Override
     public boolean touchDown(int x, int y, int pointer, int button) {
-        if(y>112*ppuy && y<282*ppuy && x>272*ppux && x<442*ppux) downClassic = true;
-        if(y>497*ppuy && y<647*ppuy && x>52*ppux && x<202*ppux) downGod = true;
-        if(y>730*ppuy && y<790*ppuy && x>13*ppux && x<73*ppux) Sound = !Sound;
+        if(y>112*ppuy && y<282*ppuy && x>272*ppux && x<442*ppux) {downClassic = true;Gdx.input.vibrate(20);}
+        if(y>497*ppuy && y<647*ppuy && x>52*ppux && x<202*ppux) {downGod = true;Gdx.input.vibrate(20);}
+        if(y>730*ppuy && y<790*ppuy && x>13*ppux && x<73*ppux) {Sound = !Sound;Gdx.input.vibrate(20);}
+        if((y>730*ppuy && y<790*ppuy && x>403*ppux && x<463*ppux)) {Gdx.input.vibrate(20);}
        // if((height-y)/ppuY >= 228 && (height-y)/ppuY <= 256 && x/ppuX>=228&& x/ppuX<=321)
         //    downCancelBtn = true;
         return true;
@@ -84,6 +85,16 @@ public class MenuScreen implements Screen,InputProcessor {
     public boolean touchUp(int x, int y, int pointer, int button) {
         if (!Gdx.app.getType().equals(ApplicationType.Android))
             return false;
+
+        if((downClassic)&(y>112*ppuy && y<282*ppuy && x>272*ppux && x<442*ppux)) {
+            dispose();
+            game.setScreen(game.menu2);
+
+        }
+        if((y>730*ppuy && y<790*ppuy && x>403*ppux && x<463*ppux)) {
+            Gdx.app.exit();
+            dispose();
+        }
         downClassic = false;
         downGod = false;
         //dispose();
