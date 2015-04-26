@@ -42,7 +42,7 @@ public class SplashScreen implements Screen,InputProcessor {
     @Override
     public void render(float delta) {
         z++;y++;
-        if (x<410) x++;
+        if (x<480) x+=5;
         if (z>300) z=0;
         if (y>100) y=0;
         Gdx.gl.glClearColor(1,1,1, 1);
@@ -57,7 +57,13 @@ public class SplashScreen implements Screen,InputProcessor {
         else if (z>265){spriteBatch.draw(textures.get("lighting1"), 0,0,480*ppux,800*ppuy);}
         else spriteBatch.draw(textures.get("splashStatic"), 0,0,480*ppux,800*ppuy);
 
-        if (y>50)spriteBatch.draw(textures.get("touch"), 0,0,480*ppux,800*ppuy);
+        if ((x>479)&(y>50))spriteBatch.draw(textures.get("touch"), 0,0,480*ppux,800*ppuy);
+
+        if (x<479) {
+            spriteBatch.draw(textures.get("clouds1"), x* ppux, 0, 480 * ppux, 800 * ppuy);
+            spriteBatch.draw(textures.get("clouds2"), 0- x* ppux, 0, 480 * ppux, 800 * ppuy);
+            spriteBatch.draw(textures.get("clouds3"), x* ppux, 0, 480 * ppux, 800 * ppuy);
+        }
         spriteBatch.end();
     }
     @Override
